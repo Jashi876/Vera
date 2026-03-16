@@ -1,0 +1,54 @@
+<div class="auth-page">
+  <div class="hero-mesh"></div>
+  
+  <div class="auth-container animate-fade-up">
+    <a routerLink="/" class="auth-logo">
+      <div class="logo-icon">
+        <i class="fas fa-clock"></i>
+      </div>
+      <span>VERA</span>
+    </a>
+
+    <div class="glass-card auth-card">
+      <div class="auth-header">
+        <h1>Create Account</h1>
+        <p>Start optimizing your film productions today.</p>
+      </div>
+
+      <form class="auth-form" (submit)="handleSignup($event)">
+        <div class="grid-2" style="gap: 16px;">
+          <div class="input-group">
+            <label>First Name</label>
+            <input type="text" class="input" placeholder="John" required>
+          </div>
+          <div class="input-group">
+            <label>Last Name</label>
+            <input type="text" class="input" placeholder="Director" required>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label>Email Address</label>
+          <input type="email" class="input" placeholder="name@production.com" required>
+        </div>
+        
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" class="input" placeholder="••••••••" required>
+        </div>
+
+        <div class="auth-extra">
+          <label class="checkbox-label">
+            <input type="checkbox" required> I agree to the <a href="#">Terms</a>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a routerLink="/login">Sign In</a>
+      </div>
+    </div>
+  </div>
+</div>

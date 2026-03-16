@@ -1,0 +1,134 @@
+<div class="callsheet-page animate-fade-up">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Production Call Sheet</h1>
+      <p class="page-subtitle">Project: <strong>Midnight Horizon</strong> | Daily Doc #14</p>
+    </div>
+    <button class="btn btn-primary" (click)="simulateDownload()">
+      <i class="fas fa-file-pdf"></i> Export Call Sheet
+    </button>
+  </header>
+
+  <div class="callsheet-container glass-card">
+    <!-- Call Sheet Header -->
+    <div class="callsheet-header">
+      <div class="cs-logo">VERA</div>
+      <div class="cs-title-group">
+        <h2>CALL SHEET</h2>
+        <div class="cs-date">Monday, March 16, 2026</div>
+      </div>
+    </div>
+
+    <div class="cs-main-grid">
+      <div class="cs-section">
+        <label>Production Title</label>
+        <div class="cs-val">Midnight Horizon</div>
+      </div>
+      <div class="cs-section">
+        <label>Crew Call</label>
+        <div class="cs-val call-time">07:00 AM</div>
+      </div>
+      <div class="cs-section">
+        <label>Sunrise / Sunset</label>
+        <div class="cs-val">06:45 AM / 06:12 PM</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Location Section -->
+    <div class="cs-block">
+      <h4 class="block-title"><i class="fas fa-map-marker-alt"></i> Primary Location</h4>
+      <div class="cs-location-card">
+        <div class="loc-name">Abandoned Warehouse - Building 4</div>
+        <div class="loc-address">124 Industrial Way, East Docklands, NY 11204</div>
+        <div class="loc-notes">Parking available in Lot B. High-vis vests required.</div>
+      </div>
+    </div>
+
+    <!-- Scene List -->
+    <div class="cs-block">
+      <h4 class="block-title"><i class="fas fa-list-ol"></i> Scene List</h4>
+      <table class="vera-table cs-table">
+        <thead>
+          <tr>
+            <th>Scene #</th>
+            <th>D/N</th>
+            <th>Description</th>
+            <th>Cast</th>
+            <th>Pages</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>42A</td>
+            <td>NIGHT</td>
+            <td>The Confrontation (Part 1)</td>
+            <td>1, 3</td>
+            <td>2 4/8</td>
+            <td>Int. Warehouse</td>
+          </tr>
+          <tr>
+            <td>43</td>
+            <td>NIGHT</td>
+            <td>Sarah waits for help</td>
+            <td>3</td>
+            <td>1 1/8</td>
+            <td>Int. Warehouse</td>
+          </tr>
+          <tr>
+            <td>44</td>
+            <td>NIGHT</td>
+            <td>Leo escapes the guards</td>
+            <td>1, Stunts</td>
+            <td>3 2/8</td>
+            <td>Ext. Warehouse Gate</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Cast Members -->
+    <div class="cs-block">
+      <h4 class="block-title"><i class="fas fa-user-friends"></i> Cast / Talent</h4>
+      <table class="vera-table cs-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Character</th>
+            <th>Actor</th>
+            <th>Pickup</th>
+            <th>Makeup</th>
+            <th>Ready</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>LEO</td>
+            <td>Mark Stallone</td>
+            <td>06:00</td>
+            <td>07:30</td>
+            <td>08:30</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>SARAH</td>
+            <td>Emily Blunt (Double)</td>
+            <td>06:30</td>
+            <td>07:00</td>
+            <td>08:00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="toast-container" *ngIf="isDownloading">
+    <div class="toast info">
+      <i class="fas fa-spinner fa-spin"></i>
+      <span>Generating PDF export...</span>
+    </div>
+  </div>
+</div>

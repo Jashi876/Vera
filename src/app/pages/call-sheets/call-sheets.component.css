@@ -1,0 +1,119 @@
+.callsheet-page {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.callsheet-container {
+  background: white !important;
+  color: #050816 !important;
+  padding: 40px !important;
+  border-radius: 0 !important;
+  max-width: 900px;
+  margin: 0 auto;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5) !important;
+}
+
+.callsheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+  border-bottom: 4px solid #050816;
+  padding-bottom: 20px;
+}
+
+.cs-logo {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 32px;
+  letter-spacing: 2px;
+}
+
+.cs-title-group {
+  text-align: right;
+}
+
+.cs-title-group h2 {
+  font-size: 48px;
+  line-height: 1;
+  margin: 0;
+}
+
+.cs-date {
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+.cs-main-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.cs-section label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.cs-val {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.call-time {
+  font-size: 24px;
+  color: var(--purple-dark);
+}
+
+.block-title {
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: #f1f5f9;
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cs-location-card {
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.loc-name { font-weight: 700; font-size: 16px; }
+.loc-address { font-size: 14px; color: #64748b; margin: 4px 0; }
+.loc-notes { font-size: 12px; font-style: italic; color: #475569; }
+
+.cs-table {
+  color: #050816 !important;
+}
+
+.cs-table th {
+  border-bottom: 2px solid #050816 !important;
+  color: #050816 !important;
+}
+
+.cs-table td {
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+.cs-block {
+  margin-bottom: 32px;
+}
+
+@media print {
+  .sidebar, .navbar, .page-header { display: none !important; }
+  .dashboard-main { margin: 0 !important; padding: 0 !important; }
+  .callsheet-container { box-shadow: none !important; margin: 0 !important; max-width: 100% !important; }
+}

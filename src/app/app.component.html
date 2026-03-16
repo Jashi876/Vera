@@ -1,0 +1,11 @@
+<app-navbar *ngIf="!isDashboard"></app-navbar>
+
+<div [class.dashboard-layout]="isDashboard">
+  <app-sidebar *ngIf="isDashboard"></app-sidebar>
+  
+  <main [class.dashboard-main]="isDashboard">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<app-footer *ngIf="!isDashboard"></app-footer>

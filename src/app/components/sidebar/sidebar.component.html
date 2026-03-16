@@ -1,0 +1,63 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a routerLink="/" class="logo">
+      <div class="logo-icon">
+        <i class="fas fa-clock"></i>
+      </div>
+      <span class="logo-text">VERA</span>
+    </a>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <span class="nav-section-label">Main</span>
+      <a routerLink="/dashboard" routerLinkActive="active" class="side-link">
+        <i class="fas fa-th-large"></i>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/projects" routerLinkActive="active" class="side-link">
+        <i class="fas fa-clapperboard"></i>
+        <span>Projects</span>
+      </a>
+      <a routerLink="/call-sheets" routerLinkActive="active" class="side-link">
+        <i class="fas fa-file-invoice"></i>
+        <span>Call Sheets</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">Manage</span>
+      <a href="#" class="side-link">
+        <i class="fas fa-users"></i>
+        <span>Team</span>
+      </a>
+      <a href="#" class="side-link">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Schedules</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">System</span>
+      <a href="#" class="side-link">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+      <a routerLink="/login" class="side-link logout">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Sign Out</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-pill glass-card">
+      <div class="user-avatar">JD</div>
+      <div class="user-info">
+        <span class="user-name">John Director</span>
+        <span class="user-role">Pro Account</span>
+      </div>
+      <i class="fas fa-chevron-right user-chevron"></i>
+    </div>
+  </div>
+</aside>
