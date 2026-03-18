@@ -13,26 +13,39 @@
       <div class="auth-header">
         <h1>Welcome Back</h1>
         <p>Enter your credentials to access your dashboard.</p>
+        <div class="alert alert-error" *ngIf="error">
+          <i class="fas fa-exclamation-circle"></i> {{ error }}
+        </div>
       </div>
 
       <form class="auth-form" (submit)="handleLogin($event)">
         <div class="input-group">
           <label>Email Address</label>
-          <input type="email" class="input" placeholder="name@production.com" required>
+          <input type="email" class="input" placeholder="name@production.com" [(ngModel)]="email" name="email" required>
         </div>
         <div class="input-group">
           <label>Password</label>
-          <input type="password" class="input" placeholder="••••••••" required>
+          <input type="password" class="input" placeholder="••••••••" [(ngModel)]="password" name="password" required>
         </div>
         
         <div class="auth-extra">
           <label class="checkbox-label">
             <input type="checkbox"> Remember me
           </label>
-          <a href="#" class="forgot-link">Forgot password?</a>
+          <a routerLink="/forgot-password" class="forgot-link">Forgot password?</a>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+        <button type="submit" class="btn btn-primary btn-full" [disabled]="loading">
+          <i class="fas fa-spinner fa-spin" *ngIf="loading"></i>
+          {{ loading ? 'Signing in...' : 'Sign In' }}
+        </button>
+
+        <div class="divider"><span>OR</span></div>
+
+        <button type="button" class="btn btn-ghost btn-full google-btn" (click)="signInWithGoogle()">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="18">
+          Sign in with Google
+        </button>
       </form>
 
       <div class="auth-footer">

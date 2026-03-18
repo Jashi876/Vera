@@ -11,10 +11,20 @@
       <a routerLink="/home" routerLinkActive="active" class="nav-link">Home</a>
       <a href="#features" class="nav-link">Features</a>
       <a routerLink="/pricing" routerLinkActive="active" class="nav-link">Pricing</a>
+      <ng-container *ngIf="user">
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
+        <a routerLink="/team" routerLinkActive="active" class="nav-link">Team</a>
+        <a routerLink="/settings" routerLinkActive="active" class="nav-link">Settings</a>
+      </ng-container>
       
       <div class="nav-actions">
-        <a routerLink="/login" class="btn btn-ghost btn-sm">Sign In</a>
-        <a routerLink="/signup" class="btn btn-primary btn-sm">Get Started</a>
+        <ng-container *ngIf="!user">
+          <a routerLink="/login" class="btn btn-ghost btn-sm">Sign In</a>
+          <a routerLink="/signup" class="btn btn-primary btn-sm">Get Started</a>
+        </ng-container>
+        <ng-container *ngIf="user">
+          <button (click)="logout()" class="btn btn-ghost btn-sm">Log Out</button>
+        </ng-container>
       </div>
     </div>
 

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ProjectService } from 'src/app/services/project.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { GeminiService } from 'src/app/services/gemini.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,25 +9,72 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  userName = 'Filmmaker';
+  stats = {
+    activeProjects: 0,
+    shootDays: 0,
+    teamMembers: 0,
+    aiOptimization: 0
+  };
 
-  timelineDays = [
-    { name: 'Mon', event: 'Sc 12-15 Shooting', progress: 80, color: 'var(--purple)' },
-    { name: 'Tue', event: 'Sc 42A Breakdown', progress: 40, color: 'var(--neon-blue)' },
-    { name: 'Wed', event: 'Pre-production Meeting', progress: 20, color: 'var(--neon-cyan)' },
-    { name: 'Thu', event: 'Location Scouting', progress: 90, color: 'var(--neon-violet)' },
-    { name: 'Fri', event: 'Sc 55 Casting', progress: 60, color: 'var(--purple-light)' }
-  ];
+  timelineDays: any[] = [];
+  activities: any[] = [];
 
-  activities = [
-    { user: 'Sarah AD', action: 'updated the call sheet for Project X', time: '2 mins ago', color: '#7c3aed' },
-    { user: 'Mike Prod', action: 'uploaded a new script draft', time: '45 mins ago', color: '#3b82f6' },
-    { user: 'AI Engine', action: 'completed schedule optimization', time: '2 hours ago', color: '#06b6d4' },
-    { user: 'John Director', action: 'approved Scene 42A', time: '5 hours ago', color: '#34d399' }
-  ];
+  goldenHour = { start: '18:14', end: '19:22' };
+  weatherAlert = '';
+  coverSetAdvised = false;
 
-  constructor() { }
+  aiStatus: { success?: boolean, message?: string } | null = null;
+  isTestingAi = false;
+  isAnalyzing = false;
+
+  constructor(
+    private projectService: ProjectService, 
+    private authService: AuthService,
+    private gemini: GeminiService
+  ) { }
 
   ngOnInit(): void {
+    this.authService.currentUser.subscribe(user => {
+      if (user) {
+        this.userName = (user.user_metadata as any).full_name || 'Filmmaker';
+      }
+    });
+
+    // Auto-check AI on load
+    this.testAiConnection();
+    this.fetchEnvironmentalIntel();
   }
 
+  async fetchEnvironmentalIntel() {
+    const today = new Date().toISOString().split('T')[0];
+    const intel = await this.gemini.getEnvironmentalIntelligence('Current Location', today);
+    this.goldenHour = intel.goldenHour;
+    if (intel.weather.prob > 40) {
+      this.weatherAlert = `${intel.weather.prob}% Rain chance. Recommended Cover Set: ${intel.interiorAlternatives[0]}`;
+      this.coverSetAdvised = intel.coverSetAdvised;
+    }
+  }
+
+  async testAiConnection() {
+    this.isTestingAi = true;
+    try {
+      this.aiStatus = await this.gemini.testConnection();
+    } finally {
+      this.isTestingAi = false;
+    }
+  }
+
+  async runNeuralBreakdown() {
+    this.isAnalyzing = true;
+    try {
+      const result = await this.gemini.analyzeScript("Sample: Exterior City Street. Rain pours. A car screeches.");
+      // console.log('Neural Breakdown Result:', result);
+      alert('AI Breakdown Complete!');
+    } catch (e) {
+      alert('Breakdown failed. Check API configuration.');
+    } finally {
+      this.isAnalyzing = false;
+    }
+  }
 }

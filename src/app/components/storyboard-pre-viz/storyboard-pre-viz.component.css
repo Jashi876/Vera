@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  grid-column: 1 / -1;
+}
+
+.pre-viz-card {
+  margin-top: 24px;
+}
+
+.storyboard-grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}

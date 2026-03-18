@@ -1,0 +1,51 @@
+<div class="chatbot-container">
+  <!-- Chat Window -->
+  <div class="chatbot-window" *ngIf="isOpen">
+    <div class="chatbot-header">
+      <div style="display: flex; align-items: center;">
+        <span class="online-indicator"></span>
+        <h3>Vera AI Assistant</h3>
+      </div>
+      <button class="chatbot-close" (click)="toggleChat()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="chat-messages" #scrollContainer>
+      <div class="message model">
+        Hello! I'm your AI production assistant. How can I help you optimize your shoot today?
+      </div>
+
+      <div *ngFor="let msg of messages" [ngClass]="['message', msg.role]">
+        {{ msg.text }}
+      </div>
+
+      <div class="message model loading" *ngIf="isLoading">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <form class="chat-input-area" (submit)="sendMessage($event)">
+      <input 
+        type="text" 
+        class="chat-input" 
+        placeholder="Type a message..." 
+        [(ngModel)]="userInput" 
+        name="userInput"
+        [disabled]="isLoading"
+        autocomplete="off"
+      >
+      <button class="chat-send" type="submit" [disabled]="!userInput.trim() || isLoading">
+        <i class="fas fa-paper-plane" *ngIf="!isLoading"></i>
+        <i class="fas fa-circle-notch fa-spin" *ngIf="isLoading"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- Chat Toggle Button -->
+  <button class="chatbot-toggle" (click)="toggleChat()" [class.active]="isOpen">
+    <i class="fas" [ngClass]="isOpen ? 'fa-comment-slash' : 'fa-robot'"></i>
+  </button>
+</div>

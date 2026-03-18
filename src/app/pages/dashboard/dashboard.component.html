@@ -1,12 +1,16 @@
 <div class="dashboard-page animate-fade-up">
   <header class="page-header">
     <div>
-      <h1 class="page-title">Welcome back, John</h1>
-      <p class="page-subtitle">Here is what's happening with your productions today.</p>
+      <h1 class="page-title">Welcome back, {{ userName }}</h1>
+      <p class="page-subtitle">Your production assistant is ready to optimize.</p>
     </div>
     <div class="header-actions">
-      <button class="btn btn-secondary btn-sm">
-        <i class="fas fa-bell"></i>
+      <div *ngIf="aiStatus" [class]="'ai-status-pill ' + (aiStatus.success ? 'status-online' : 'status-offline')" [title]="aiStatus.message || ''">
+        <i class="fas" [ngClass]="aiStatus.success ? 'fa-check-circle' : 'fa-times-circle'"></i>
+        {{ aiStatus.success ? 'Gemini AI Online' : 'AI Offline' }}
+      </div>
+      <button class="btn btn-secondary btn-sm" (click)="testAiConnection()" [disabled]="isTestingAi">
+        <i class="fas fa-sync" [ngClass]="{'fa-spin': isTestingAi}"></i> {{ isTestingAi ? 'Verifying...' : 'Test AI' }}
       </button>
       <button class="btn btn-primary btn-sm" routerLink="/projects">
         <i class="fas fa-plus"></i> New Project
@@ -18,27 +22,27 @@
   <div class="grid-4 stats-grid">
     <div class="stat-card">
       <div class="stat-icon purple"><i class="fas fa-film"></i></div>
-      <div class="stat-value">4</div>
+      <div class="stat-value">{{ stats.activeProjects }}</div>
       <div class="stat-label">Active Projects</div>
-      <div class="stat-change up"><i class="fas fa-arrow-up"></i> +1 this month</div>
+      <div class="stat-change up"><i class="fas fa-arrow-up"></i> +{{ stats.activeProjects > 0 ? 1 : 0 }} this month</div>
     </div>
     <div class="stat-card">
       <div class="stat-icon blue"><i class="fas fa-calendar-day"></i></div>
-      <div class="stat-value">12</div>
+      <div class="stat-value">{{ stats.shootDays }}</div>
       <div class="stat-label">Total Shoot Days</div>
       <div class="stat-change up"><i class="fas fa-arrow-up"></i> 85% completion</div>
     </div>
     <div class="stat-card">
       <div class="stat-icon cyan"><i class="fas fa-users"></i></div>
-      <div class="stat-value">28</div>
+      <div class="stat-value">{{ stats.teamMembers }}</div>
       <div class="stat-label">Team Members</div>
-      <div class="stat-change">Across 3 units</div>
+      <div class="stat-change">Active units</div>
     </div>
     <div class="stat-card">
       <div class="stat-icon neon-violet"><i class="fas fa-microchip"></i></div>
-      <div class="stat-value">AI</div>
-      <div class="stat-label">Schedule Optimized</div>
-      <div class="stat-change up">Efficiency +24%</div>
+      <div class="stat-value">{{ stats.aiOptimization }}%</div>
+      <div class="stat-label">AI Optimization</div>
+      <div class="stat-change up">Efficiency boost</div>
     </div>
   </div>
 
@@ -52,6 +56,9 @@
         </select>
       </div>
       <div class="timeline-container">
+        <div *ngIf="timelineDays.length === 0" class="empty-state-card">
+          <p class="text-secondary">No production timeline active. Start a project to see AI-optimized sequencing.</p>
+        </div>
         <div class="timeline-day" *ngFor="let day of timelineDays">
           <div class="day-label">{{ day.name }}</div>
           <div class="day-events">
@@ -67,6 +74,9 @@
     <div class="glass-card activity-feed">
       <h3 class="card-title">Recent Activity</h3>
       <div class="feed-items">
+        <div *ngIf="activities.length === 0" class="empty-state-mini">
+          <p class="text-secondary">No recent team activity.</p>
+        </div>
         <div class="feed-item" *ngFor="let activity of activities">
           <div class="activity-dot" [style.background]="activity.color"></div>
           <div class="activity-content">
@@ -78,6 +88,17 @@
       <button class="btn btn-ghost btn-sm btn-full" style="margin-top: 16px; width: 100%;">View All Activity</button>
     </div>
   </div>
+
+  <div class="dashboard-grid" style="margin-top: 24px;">
+    <!-- Burn Rate Tracker -->
+    <app-burn-rate-tracker></app-burn-rate-tracker>
+    
+    <!-- ROI Simulator -->
+    <app-roi-simulator></app-roi-simulator>
+  </div>
+
+  <!-- Storyboard Pre-Viz -->
+  <app-storyboard-pre-viz style="margin-top: 24px;"></app-storyboard-pre-viz>
 
   <!-- Active Projects Table/Grid -->
   <div class="glass-card projects-section" style="margin-top: 24px;">
@@ -96,28 +117,78 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><span class="badge badge-purple">42A</span></td>
-          <td>The Confrontation</td>
-          <td>Abandoned Warehouse</td>
-          <td>Leo, Sarah</td>
-          <td><span class="badge badge-blue">Scheduled</span></td>
-        </tr>
-        <tr>
-          <td><span class="badge badge-purple">12</span></td>
-          <td>Morning Coffee</td>
-          <td>Downtown Cafe</td>
-          <td>Leo, Background</td>
-          <td><span class="badge badge-green">Ready</span></td>
-        </tr>
-        <tr>
-          <td><span class="badge badge-purple">55</span></td>
-          <td>Car Chase</td>
-          <td>Main St. Tunnel</td>
-          <td>Leo, Stunts</td>
-          <td><span class="badge badge-amber">Revising</span></td>
+        <tr *ngIf="stats.activeProjects === 0">
+          <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+            <i class="fas fa-folder-open" style="font-size: 24px; margin-bottom: 12px; display: block;"></i>
+            No upcoming scenes. Import a script to begin neural breakdown.
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
+
+  <div class="dashboard-grid" style="margin-top: 24px;">
+    <!-- Neural Insights -->
+    <div class="glass-card">
+      <div class="card-header-flex">
+        <h3 class="card-title"><i class="fas fa-brain" style="color: var(--neon-violet); margin-right: 8px;"></i> Neural Insights</h3>
+        <span class="badge badge-purple">Scene 42A</span>
+      </div>
+      <div class="ai-insight-content" style="margin-top: 16px;" *ngIf="stats.activeProjects > 0; else noInsights">
+        <div class="insight-p">
+          <i class="fas fa-exclamation-triangle" style="color: var(--error); margin-right: 8px;"></i>
+          <strong>Safety Risk:</strong> High pyro activity detected in dialogue. Mandatory safety meeting required.
+        </div>
+        <div class="insight-p" style="margin-top: 12px;">
+          <i class="fas fa-magic" style="color: var(--cyan-light); margin-right: 8px;"></i>
+          <strong>Efficiency:</strong> Shuffling Scene 12 after 42A saves 2.5h of lighting reset.
+        </div>
+      </div>
+      <ng-template #noInsights>
+        <div class="empty-state-mini" style="margin-top: 16px;">
+          <p class="text-secondary">Run a neural breakdown on a project script to generate AI safety and efficiency insights.</p>
+        </div>
+      </ng-template>
+      <button class="btn btn-primary btn-sm btn-full" style="margin-top: 20px; width: 100%; height: 40px;" (click)="runNeuralBreakdown()" [disabled]="isAnalyzing">
+        <i class="fas fa-microchip" [ngClass]="{'fa-spin': isAnalyzing}"></i> 
+        {{ isAnalyzing ? 'Analyzing Narrative...' : 'Run Neural Breakdown' }}
+      </button>
+    </div>
+
+    <!-- Weather Intelligence -->
+    <div class="glass-card">
+      <div class="card-header-flex">
+        <h3 class="card-title"><i class="fas fa-cloud-sun" style="color: var(--blue-light); margin-right: 8px;"></i> Weather Intelligence</h3>
+        <span class="badge badge-green">Live Update</span>
+      </div>
+      <div class="weather-brief" style="margin-top: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 24px; font-weight: 600;">72°F</div>
+            <div class="text-secondary">Partial Clouds</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="color: var(--neon-violet); font-size: 13px; font-weight: 600;">Golden Hour</div>
+            <div style="font-size: 18px;">{{ goldenHour.start }} - {{ goldenHour.end }}</div>
+          </div>
+        </div>
+        <div class="alert alert-warning" *ngIf="weatherAlert" style="margin-top: 16px; padding: 12px; font-size: 13px;">
+          <i class="fas fa-umbrella"></i> {{ weatherAlert }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing Quick View -->
+  <div class="glass-card pricing-widget" style="margin-top: 24px; background: linear-gradient(90deg, rgba(124,58,237,0.1), transparent);">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h4 style="margin: 0;">Unlock Full AI Power</h4>
+        <p class="text-secondary" style="margin: 4px 0 0 0; font-size: 13px;">Pro features: Predictive Weather, Neural Optimizer, and 24/7 Support.</p>
+      </div>
+      <button class="btn btn-primary btn-sm" routerLink="/pricing">View Plans</button>
+    </div>
+  </div>
+  
+  <!-- AI Chatbot Assistant -->
 </div>

@@ -1,0 +1,120 @@
+<div class="dashboard-page animate-fade-up">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Settings</h1>
+      <p class="page-subtitle">Manage your account, preferences, and workspace.</p>
+    </div>
+  </header>
+
+  <div class="settings-container glass-card">
+    <div class="settings-sidebar">
+      <button class="settings-tab" [class.active]="activeTab === 'account'" (click)="setTab('account')">
+        <i class="fas fa-user-circle"></i> <span>My Account</span>
+      </button>
+      <button class="settings-tab" [class.active]="activeTab === 'notifications'" (click)="setTab('notifications')">
+        <i class="fas fa-bell"></i> <span>Notifications</span>
+      </button>
+      <button class="settings-tab" [class.active]="activeTab === 'billing'" (click)="setTab('billing')">
+        <i class="fas fa-credit-card"></i> <span>Billing & Pricing</span>
+      </button>
+      <button class="settings-tab" [class.active]="activeTab === 'ai'" (click)="setTab('ai')">
+        <i class="fas fa-microchip"></i> <span>AI Configuration</span>
+      </button>
+      <button class="settings-tab" [class.active]="activeTab === 'security'" (click)="setTab('security')">
+        <i class="fas fa-shield-alt"></i> <span>Security</span>
+      </button>
+    </div>
+
+    <div class="settings-main">
+      <!-- Account Tab -->
+      <div *ngIf="activeTab === 'account'" class="animate-fade-up">
+        <h2 class="section-title" style="font-size: 24px;">Account Information</h2>
+        <div class="alert alert-success" *ngIf="successMessage">
+          <i class="fas fa-check-circle"></i> {{ successMessage }}
+        </div>
+        
+        <form (submit)="$event.preventDefault(); saveAccount()" class="settings-form">
+          <div class="grid-2">
+            <div class="input-group">
+              <label>Full Name</label>
+              <input type="text" class="input" [(ngModel)]="profile.fullName" name="fullName">
+            </div>
+            <div class="input-group">
+              <label>Email Address</label>
+              <input type="email" class="input" [(ngModel)]="profile.email" name="email" disabled>
+            </div>
+          </div>
+          <div class="grid-2" style="margin-top: 20px;">
+            <div class="input-group">
+              <label>Professional Role</label>
+              <select class="input" [(ngModel)]="profile.role" name="role">
+                <option>Director</option>
+                <option>Producer</option>
+                <option>First AD</option>
+                <option>Cinematographer</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Production Company</label>
+              <input type="text" class="input" [(ngModel)]="profile.company" name="company">
+            </div>
+          </div>
+          
+          <div class="divider"></div>
+          
+          <div style="display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary" [disabled]="loading">
+              <i class="fas fa-save" *ngIf="!loading"></i>
+              {{ loading ? 'Saving...' : 'Save Changes' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Notifications Tab -->
+      <div *ngIf="activeTab === 'notifications'" class="animate-fade-up">
+        <h2 class="section-title" style="font-size: 24px;">Notification Preferences</h2>
+        <div class="settings-list">
+          <div class="settings-item-toggle">
+            <div>
+              <span class="settings-label">Email Alerts</span>
+              <p class="settings-description">Receive critical production updates via email.</p>
+            </div>
+            <input type="checkbox" [(ngModel)]="notificationSettings.emailAlerts" name="emailAlerts">
+          </div>
+          <div class="settings-item-toggle">
+            <div>
+              <span class="settings-label">Shooting Conflicts</span>
+              <p class="settings-description">Notify when a turnaround or location conflict is detected.</p>
+            </div>
+            <input type="checkbox" [(ngModel)]="notificationSettings.shootingConflicts" name="shootingConflicts">
+          </div>
+          <div class="settings-item-toggle">
+            <div>
+              <span class="settings-label">AI Optimization Reports</span>
+              <p class="settings-description">Receive weekly reports on schedule efficiency improvements.</p>
+            </div>
+            <input type="checkbox" [(ngModel)]="notificationSettings.aiOptimization" name="aiOptimization">
+          </div>
+        </div>
+      </div>
+
+      <!-- Billing/Pricing Tab -->
+      <div *ngIf="activeTab === 'billing'" class="animate-fade-up">
+        <h2 class="section-title" style="font-size: 24px;">Your Plan</h2>
+        <div class="glass-card billing-card" style="border-color: var(--purple-light); padding: 24px;">
+          <div class="badge badge-purple" style="margin-bottom: 12px;">Current Plan</div>
+          <h3>Pro Filmmaker</h3>
+          <p class="text-secondary">$49 / month</p>
+          <ul class="plan-features" style="margin-top: 20px; list-style: none; padding: 0;">
+            <li style="margin-bottom: 10px;"><i class="fas fa-check" style="color: #34d399; margin-right: 10px;"></i> Unlimited AI Script Analysis</li>
+            <li style="margin-bottom: 10px;"><i class="fas fa-check" style="color: #34d399; margin-right: 10px;"></i> Neural Schedule Solver</li>
+            <li style="margin-bottom: 10px;"><i class="fas fa-check" style="color: #34d399; margin-right: 10px;"></i> Tomorrow.io Integration</li>
+            <li style="margin-bottom: 10px;"><i class="fas fa-check" style="color: #34d399; margin-right: 10px;"></i> 10 Active Projects</li>
+          </ul>
+          <button class="btn btn-secondary btn-full" style="margin-top: 24px; width: 100%;">Upgrade to Enterprise</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

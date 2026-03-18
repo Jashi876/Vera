@@ -1,11 +1,21 @@
 <app-navbar *ngIf="!isDashboard"></app-navbar>
 
+<div class="mobile-dashboard-header" *ngIf="isDashboard">
+  <button class="menu-toggle" (click)="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+  <div class="mobile-logo">VERA</div>
+  <div style="width: 40px;"></div> <!-- Spacer -->
+</div>
+
 <div [class.dashboard-layout]="isDashboard">
   <app-sidebar *ngIf="isDashboard"></app-sidebar>
   
   <main [class.dashboard-main]="isDashboard">
     <router-outlet></router-outlet>
   </main>
+  
+  <app-ai-chatbot *ngIf="isDashboard"></app-ai-chatbot>
 </div>
 
 <app-footer *ngIf="!isDashboard"></app-footer>

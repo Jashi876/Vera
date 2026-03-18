@@ -1,0 +1,40 @@
+<div class="glass-card roi-card animate-fade-up">
+  <div class="card-header-flex">
+    <h3 class="card-title"><i class="fas fa-chart-line text-cyan"></i> Casting ROI Simulator</h3>
+    <button class="btn btn-secondary btn-sm" (click)="simulate()">Recalculate AI</button>
+  </div>
+
+  <div class="simulation-inputs" style="margin-top: 20px; display: grid; gap: 16px;">
+    <div class="input-group">
+      <label>Genre Profile</label>
+      <select class="input" [(ngModel)]="genre" name="genre">
+        <option>Sci-Fi Thriller</option>
+        <option>Horror</option>
+        <option>Romantic Comedy</option>
+        <option>Drama</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Casting Profile</label>
+      <select class="input" [(ngModel)]="castingTier" name="castingTier">
+        <option>Major Star</option>
+        <option>A-List Indie</option>
+        <option>Emerging Talent</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="result-area" style="margin-top: 24px; padding: 20px; text-align: center; border-radius: 12px; background: rgba(0,0,0,0.2);">
+    <div class="roi-value" style="font-size: 48px; font-weight: 800; color: #67e8f9;">{{ simulatedROI }}x</div>
+    <div class="text-secondary" style="font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Predicted Multiplier</div>
+    
+    <div style="margin-top: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 20px; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3);">
+      <div style="width: 8px; height: 8px; border-radius: 50%; background: #34d399;"></div>
+      <span style="font-size: 12px; color: #34d399; font-weight: 600;">Risk Score: {{ riskScore }}</span>
+    </div>
+  </div>
+
+  <p class="text-secondary" style="font-size: 11px; margin-top: 16px; opacity: 0.6;">
+    *Simulations based on historical data from similar A24/Blumhouse models. This is for decision support only.
+  </p>
+</div>

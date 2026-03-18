@@ -1,0 +1,59 @@
+/* Schedules Specific Styles */
+
+.schedule-controls {
+  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+}
+
+.vera-table th {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.vera-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-primary);
+}
+
+.insight-card {
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--neon-blue);
+  transition: var(--transition);
+}
+
+.insight-card:hover {
+  background: rgba(59, 130, 246, 0.05);
+  transform: translateY(-2px);
+}
+
+.insight-card label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.stat-value small {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.text-blue {
+  color: var(--neon-blue);
+}
+
+/* Custom Table Shadows */
+.glass-card {
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .vera-table {
+    display: block;
+    overflow-x: auto;
+  }
+}

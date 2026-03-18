@@ -1,4 +1,7 @@
-<aside class="sidebar">
+<aside class="sidebar" [class.open]="isOpen">
+  <button class="sidebar-close" (click)="toggleSidebar()">
+    <i class="fas fa-times"></i>
+  </button>
   <div class="sidebar-header">
     <a routerLink="/" class="logo">
       <div class="logo-icon">
@@ -27,23 +30,31 @@
 
     <div class="nav-section">
       <span class="nav-section-label">Manage</span>
-      <a href="#" class="side-link">
+      <a routerLink="/team" routerLinkActive="active" class="side-link">
         <i class="fas fa-users"></i>
         <span>Team</span>
       </a>
-      <a href="#" class="side-link">
+      <a routerLink="/schedules" routerLinkActive="active" class="side-link">
         <i class="fas fa-calendar-alt"></i>
         <span>Schedules</span>
       </a>
     </div>
 
     <div class="nav-section">
+      <span class="nav-section-label">Intelligence</span>
+      <a (click)="toggleAiChat()" class="side-link ai-trigger" style="cursor: pointer;">
+        <i class="fas fa-robot"></i>
+        <span>Vera AI</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
       <span class="nav-section-label">System</span>
-      <a href="#" class="side-link">
+      <a routerLink="/settings" routerLinkActive="active" class="side-link">
         <i class="fas fa-cog"></i>
         <span>Settings</span>
       </a>
-      <a routerLink="/login" class="side-link logout">
+      <a (click)="logout()" class="side-link logout" style="cursor: pointer;">
         <i class="fas fa-sign-out-alt"></i>
         <span>Sign Out</span>
       </a>
@@ -52,9 +63,9 @@
 
   <div class="sidebar-footer">
     <div class="user-pill glass-card">
-      <div class="user-avatar">JD</div>
+      <div class="user-avatar">{{ userInitials }}</div>
       <div class="user-info">
-        <span class="user-name">John Director</span>
+        <span class="user-name">{{ userName }}</span>
         <span class="user-role">Pro Account</span>
       </div>
       <i class="fas fa-chevron-right user-chevron"></i>

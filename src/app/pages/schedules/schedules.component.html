@@ -1,0 +1,90 @@
+<div class="dashboard-page animate-fade-up">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Shooting Schedule</h1>
+      <p class="page-subtitle">AI-powered optimization for your production sequence.</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="runNeuralBreakdown()" [disabled]="isAnalyzing">
+        <i class="fas fa-brain" [class.fa-spin]="isAnalyzing"></i> 
+        {{ isAnalyzing ? 'Analyzing Script...' : 'Neural Breakdown' }}
+      </button>
+      <button class="btn btn-primary" (click)="runOptimization()" [disabled]="isOptimizing">
+        <i class="fas fa-magic" [class.fa-spin]="isOptimizing"></i>
+        {{ isOptimizing ? 'Optimizing...' : 'Solve Schedule' }}
+      </button>
+    </div>
+  </header>
+
+  <div class="schedule-controls glass-card" style="margin-bottom: 24px; padding: 12px; display: flex; gap: 12px;">
+    <button class="btn btn-xs" [class.btn-primary]="activeView === 'list'" [class.btn-ghost]="activeView !== 'list'" (click)="setView('list')">List View</button>
+    <button class="btn btn-xs" [class.btn-primary]="activeView === 'calendar'" [class.btn-ghost]="activeView !== 'calendar'" (click)="setView('calendar')">Calendar</button>
+    <button class="btn btn-xs" [class.btn-primary]="activeView === 'gantt'" [class.btn-ghost]="activeView !== 'gantt'" (click)="setView('gantt')">Gantt Chart</button>
+  </div>
+
+  <div class="glass-card">
+    <table class="vera-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Scene Title</th>
+          <th>Location</th>
+          <th>Cast</th>
+          <th>Hazards</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="scenes.length === 0">
+          <td colspan="6" style="text-align: center; padding: 60px; color: var(--text-secondary);">
+            <i class="fas fa-magic" style="font-size: 32px; margin-bottom: 16px; display: block; color: var(--neon-violet);"></i>
+            <h4 style="color: var(--text-primary);">No Scenes Generated</h4>
+            <p>Paste a script fragment and click <strong>Neural Breakdown</strong> to begin.</p>
+          </td>
+        </tr>
+        <tr *ngFor="let scene of scenes">
+          <td><span class="badge badge-purple">{{ scene.id }}</span></td>
+          <td><strong>{{ scene.title }}</strong></td>
+          <td>{{ scene.location }}</td>
+          <td>{{ scene.cast.join(', ') }}</td>
+          <td>
+            <span class="badge" [class.badge-red]="scene.hazards === 'High-Risk'" [class.badge-cyan]="scene.hazards === 'None'" [class.badge-amber]="scene.hazards === 'Low'">
+              {{ scene.hazards }}
+            </span>
+          </td>
+          <td>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <span class="badge" [class.badge-green]="scene.status === 'Ready'" 
+                    [class.badge-red]="scene.status === 'Conflict'"
+                    [class.badge-blue]="scene.status.includes('Repaired')">
+                {{ scene.status }}
+              </span>
+              <small *ngIf="scene.callTimeShift" class="text-blue" style="font-weight: 600;">
+                <i class="fas fa-clock"></i> {{ scene.callTimeShift }} shift
+              </small>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- AI Insights Panel -->
+  <div class="glass-card" style="margin-top: 24px; border-color: var(--neon-blue);">
+    <h3 class="card-title"><i class="fas fa-robot text-blue"></i> AI Optimization Insights</h3>
+    <div class="grid-3" style="margin-top: 16px;">
+      <div class="insight-card">
+        <label>Estimated Efficiency</label>
+        <div class="stat-value">{{ optimizationResult ? optimizationResult.efficiencyBoost + '%' : '94%' }}</div>
+      </div>
+      <div class="insight-card">
+        <label>Location Travel Saved</label>
+        <div class="stat-value">{{ optimizationResult ? optimizationResult.travelSaved : '14 mi' }}</div>
+      </div>
+      <div class="insight-card">
+        <label>Neural Reliability</label>
+        <div class="stat-value">{{ optimizationResult ? 'Ultra' : 'High' }}</div>
+      </div>
+    </div>
+  </div>
+</div>

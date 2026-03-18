@@ -2,7 +2,7 @@
   <header class="page-header">
     <div>
       <h1 class="page-title">Production Call Sheet</h1>
-      <p class="page-subtitle">Project: <strong>Midnight Horizon</strong> | Daily Doc #14</p>
+      <p class="page-subtitle">Project: <strong>{{ activeProject?.title || 'Loading...' }}</strong> | Daily Doc #14</p>
     </div>
     <button class="btn btn-primary" (click)="simulateDownload()">
       <i class="fas fa-file-pdf"></i> Export Call Sheet
@@ -22,7 +22,7 @@
     <div class="cs-main-grid">
       <div class="cs-section">
         <label>Production Title</label>
-        <div class="cs-val">Midnight Horizon</div>
+        <div class="cs-val">{{ activeProject?.title }}</div>
       </div>
       <div class="cs-section">
         <label>Crew Call</label>
@@ -30,7 +30,14 @@
       </div>
       <div class="cs-section">
         <label>Sunrise / Sunset</label>
-        <div class="cs-val">06:45 AM / 06:12 PM</div>
+        <div class="cs-val" *ngIf="goldenHour">{{ goldenHour.start }} AM / {{ goldenHour.end }} PM</div>
+      </div>
+      <div class="cs-section status-live" *ngIf="weatherIntel">
+        <label>Weather Intelligence</label>
+        <div class="cs-val" [class.text-blue]="weatherIntel.prob < 50" [class.text-red]="weatherIntel.prob >= 50">
+          <i class="fas fa-cloud-showers-heavy"></i> {{ weatherIntel.forecast }} ({{ weatherIntel.prob }}%)
+          <span style="display: block; font-size: 11px; opacity: 0.8;">{{ weatherIntel.safetyAlert }}</span>
+        </div>
       </div>
     </div>
 

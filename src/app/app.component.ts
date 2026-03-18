@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { UiService } from './services/ui.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ export class AppComponent implements OnInit {
   title = 'vera';
   isDashboard = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private ui: UiService) {}
 
   ngOnInit() {
     this.router.events.pipe(
@@ -20,5 +21,9 @@ export class AppComponent implements OnInit {
       const dashboardRoutes = ['/dashboard', '/projects', '/call-sheets'];
       this.isDashboard = dashboardRoutes.some(route => event.url.startsWith(route));
     });
+  }
+
+  toggleSidebar() {
+    this.ui.toggleSidebar();
   }
 }

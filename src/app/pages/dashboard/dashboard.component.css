@@ -166,6 +166,58 @@
   gap: 6px;
 }
 
+
+.insight-p {
+  display: flex;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.insight-p i {
+  margin-top: 3px;
+  font-size: 14px;
+}
+
+.weather-brief {
+  color: var(--text-primary);
+}
+
+.alert-warning {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border-radius: 8px;
+}
+
 @media (max-width: 1024px) {
   .dashboard-grid { grid-template-columns: 1fr; }
+}
+
+.empty-state-card, .empty-state-mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  width: 100%;
+}
+
+.empty-state-mini {
+  padding: 20px;
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .dashboard-grid-main {
+    grid-template-columns: 1fr !important;
+  }
 }

@@ -3,7 +3,7 @@
     <div class="section-header center animate-fade-up">
       <div class="section-label">Our Mission</div>
       <h1 class="section-title">The Future of <span class="gradient-text">Production Planning</span></h1>
-      <p class="section-subtitle">Vera (ShotClock) was built by filmmakers, for filmmakers. We know the struggle of spreadsheets and manual scheduling.</p>
+      <p class="section-subtitle">Vera (Video Efficiency and Resource Assistant) was built by filmmakers, for filmmakers. We know the struggle of spreadsheets and manual scheduling.</p>
     </div>
 
     <div class="grid-2 benefit-section">
@@ -11,7 +11,7 @@
         <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=800" alt="Camera" class="benefit-img glass-card">
       </div>
       <div class="benefit-content">
-        <h3>Why filmmakers need ShotClock</h3>
+        <h3>Why filmmakers need V.e.r.a</h3>
         <p>Traditional scheduling is a tedious, error-prone process that takes days of a producer's or AD's time. ShotClock uses advanced AI to automate the heavy lifting.</p>
         
         <div class="benefit-list">
@@ -40,12 +40,25 @@
       </div>
     </div>
 
+    <div id="product-showcase" class="section center animate-fade-up" style="margin-top: 80px;">
+      <div class="section-label">Sneak Peek</div>
+      <h2 class="section-title">The <span class="gradient-text">Intelligent Engine</span> in Action</h2>
+      <p class="section-subtitle">Real-time neural breakdown, union-aware guarding, and cinematic storyboarding.</p>
+      
+      <div class="demo-mockup-wrap glass-card" style="margin-top: 40px; padding: 12px; border-radius: 24px; background: rgba(255,255,255,0.05);">
+        <img src="assets/images/demo-mockup.png" alt="Vera Dashboard Demo" style="width: 100%; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+      </div>
+    </div>
+
     <div class="pricing-preview-home center">
       <h2 class="section-title">Start your production today</h2>
       <p class="section-subtitle">Simple pricing for projects of all sizes.</p>
       <div class="btns-wrap">
-        <a routerLink="/pricing" class="btn btn-primary">View Pricing</a>
-        <a routerLink="/signup" class="btn btn-secondary">Create Free Account</a>
+        <button class="btn btn-secondary" (click)="openDemo()">
+          <i class="fas fa-play-circle"></i> View Demo
+        </button>
+        <a routerLink="/pricing" class="btn btn-ghost">View Pricing</a>
+        <a routerLink="/signup" class="btn btn-primary">Create Free Account</a>
       </div>
     </div>
   </div>

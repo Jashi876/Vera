@@ -9,45 +9,34 @@
     </button>
   </header>
 
-  <div class="grid-3 projects-grid">
+  <div class="grid-3 projects-grid" *ngIf="projects.length > 0; else emptyProjects">
     <div class="project-card glass-card" *ngFor="let project of projects">
-      <div class="project-thumb">
-        <img [src]="project.image" [alt]="project.title">
-        <div class="project-badge">{{ project.status }}</div>
-      </div>
-      <div class="project-info">
-        <h3>{{ project.title }}</h3>
-        <div class="project-meta">
-          <span><i class="fas fa-film"></i> {{ project.scenes }} Scenes</span>
-          <span><i class="fas fa-calendar"></i> Next: {{ project.nextShoot }}</span>
-        </div>
-        <div class="project-progress">
-          <div class="progress-info">
-            <span>Overall Progress</span>
-            <span>{{ project.progress }}%</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" [style.width.%]="project.progress"></div>
-          </div>
-        </div>
-        <button class="btn btn-secondary btn-full" style="width: 100%; margin-top: 16px;">
-          Open Dashboard
-        </button>
-      </div>
+      <!-- ... existing card content ... -->
     </div>
   </div>
+
+  <ng-template #emptyProjects>
+    <div class="empty-state-container glass-card animate-fade-up">
+      <div class="empty-icon"><i class="fas fa-clapperboard"></i></div>
+      <h2>No projects yet</h2>
+      <p>Start your first production by clicking the button below.</p>
+      <button class="btn btn-primary" (click)="openModal()">
+        <i class="fas fa-plus"></i> Create Your First Project
+      </button>
+    </div>
+  </ng-template>
 
   <!-- Create Project Modal -->
   <div class="modal-overlay" [class.active]="modalOpen">
     <div class="modal">
       <div class="modal-header">
-        <h3 class="modal-title">Create New Project</h3>
+        <h3 class="modal-title">{{ isEditMode ? 'Edit Project' : 'Create New Project' }}</h3>
         <button class="modal-close" (click)="closeModal()"><i class="fas fa-times"></i></button>
       </div>
       <form class="project-form" (submit)="handleSubmit($event)">
         <div class="input-group">
           <label>Project Title</label>
-          <input type="text" class="input" placeholder="e.g. Midnight Horizon" required>
+          <input type="text" class="input" placeholder="e.g. Midnight Horizon" [(ngModel)]="newProject.title" name="title" required>
         </div>
         <div class="input-group">
           <label>Production Type</label>
@@ -67,7 +56,9 @@
         </div>
         <div class="modal-footer" style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
           <button type="button" class="btn btn-ghost" (click)="closeModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">AI Analyze & Create</button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            {{ loading ? 'Saving...' : (isEditMode ? 'Save Changes' : 'AI Analyze & Create') }}
+          </button>
         </div>
       </form>
     </div>
