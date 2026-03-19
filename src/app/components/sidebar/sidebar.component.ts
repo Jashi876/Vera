@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { AuthService } from 'src/app/services/auth.service';
-import { TeamService } from 'src/app/services/team.service';
-import { UiService } from 'src/app/services/ui.service';
+import { AuthService } from '../../services/auth.service';
+import { TeamService } from '../../services/team.service';
+import { UiService } from '../../services/ui.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -22,14 +22,14 @@ export class SidebarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.auth.currentUser.subscribe(user => {
+    this.auth.currentUser.subscribe((user: any) => {
       if (user) {
         this.userName = (user.user_metadata as any).full_name || 'User';
         this.userInitials = this.userName.substring(0, 2).toUpperCase();
       }
     });
 
-    this.ui.isSidebarOpen$.subscribe(open => {
+    this.ui.isSidebarOpen$.subscribe((open: boolean) => {
       this.isOpen = open;
     });
 
