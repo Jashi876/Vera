@@ -14,7 +14,8 @@ const routes: Routes = [
   { 
     path: 'dashboard', 
     loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    data: { title: 'Dashboard' }
   },
   { 
     path: 'settings', 
@@ -26,14 +27,15 @@ const routes: Routes = [
     loadChildren: () => import('./pages/team/team.module').then(m => m.TeamModule),
     canActivate: [AuthGuard]
   },
-  { path: 'pricing', component: PricingComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'signup', component: SignupComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'pricing', component: PricingComponent, data: { title: 'Pricing' } },
+  { path: 'login', component: LoginComponent, data: { title: 'Sign In' } },
+  { path: 'signup', component: SignupComponent, data: { title: 'Create Account' } },
+  { path: 'forgot-password', component: ForgotPasswordComponent, data: { title: 'Reset Password' } },
   // Backward compatibility for old routes that are now sub-routes of dashboard
   { path: 'projects', redirectTo: 'dashboard/projects' },
   { path: 'call-sheets', redirectTo: 'dashboard/call-sheets' },
   { path: 'schedules', redirectTo: 'dashboard/schedules' },
+  { path: 'script-analyzer', redirectTo: 'dashboard/script-analyzer' },
   { path: '**', redirectTo: '' }
 ];
 

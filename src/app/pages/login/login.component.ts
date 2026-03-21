@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -8,23 +10,34 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  email = '';
-  password = '';
+  loginForm: FormGroup;
   loading = false;
   error = '';
 
-  constructor(private router: Router, private auth: AuthService) { }
+  constructor(
+    private fb: FormBuilder,
+    private router: Router, 
+    private auth: AuthService
+  ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
 
   ngOnInit(): void {
   }
 
-  async handleLogin(event: Event) {
-    event.preventDefault();
+  async handleLogin() {
+    if (this.loginForm.invalid) return;
+
     this.loading = true;
     this.error = '';
 
+    const { email, password } = this.loginForm.value;
+
     try {
-      const { data, error } = await this.auth.signIn(this.email, this.password);
+      const { data, error } = await firstValueFrom(this.auth.signIn(email, password));
       if (error) throw error;
       
       this.router.navigate(['/dashboard']);

@@ -41,6 +41,11 @@ export class DashboardComponent implements OnInit {
       }
     });
 
+    // Fetch Dashboard Stats as Observable
+    this.projectService.getDashboardStats().subscribe(stats => {
+      this.stats = stats;
+    });
+
     // Auto-check AI on load
     this.testAiConnection();
     this.fetchEnvironmentalIntel();

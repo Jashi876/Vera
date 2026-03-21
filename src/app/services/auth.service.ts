@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { SupabaseService } from './supabase.service';
 import { AuthChangeEvent, Session, User } from '@supabase/supabase-js';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -30,21 +30,21 @@ export class AuthService {
     return this._session.value;
   }
 
-  async signUp(email: string, password: string, metadata: any = {}) {
-    return await this.supabase.client.auth.signUp({
+  signUp(email: string, password: string, metadata: any = {}): Observable<any> {
+    return from(this.supabase.client.auth.signUp({
       email,
       password,
       options: {
         data: metadata
       }
-    });
+    }));
   }
 
-  async signIn(email: string, password: string) {
-    return await this.supabase.client.auth.signInWithPassword({
+  signIn(email: string, password: string): Observable<any> {
+    return from(this.supabase.client.auth.signInWithPassword({
       email,
       password,
-    });
+    }));
   }
 
   async signInWithGoogle() {
@@ -62,8 +62,8 @@ export class AuthService {
     });
   }
 
-  async signOut() {
-    return await this.supabase.client.auth.signOut();
+  signOut(): Observable<any> {
+    return from(this.supabase.client.auth.signOut());
   }
 
   async updateProfile(updates: any) {

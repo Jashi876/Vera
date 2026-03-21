@@ -1,0 +1,170 @@
+<div class="analyzer-container">
+  <header class="page-header">
+    <div class="header-content">
+      <h1>Neural Script Analyzer</h1>
+      <p class="subtitle">Dissect scripts into production data with cinematic precision.</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="clearAll()" [disabled]="isAnalyzing">
+        <i class="fas fa-trash"></i> Reset
+      </button>
+    </div>
+  </header>
+
+  <div class="analyzer-grid">
+    <!-- Input Section -->
+    <section class="input-pane glass-card">
+      <div class="pane-header">
+        <i class="fas fa-file-lines"></i>
+        <span>Script Input</span>
+      </div>
+      <form (submit)="analyzeScript()" #scriptForm="ngForm" class="editor-area">
+        <textarea 
+          [(ngModel)]="scriptText" 
+          name="scriptText"
+          placeholder="Paste your screenplay here... (e.g. EXT. CITY STREET - NIGHT. Rain lashes down...)"
+          class="script-textarea"
+          [disabled]="isAnalyzing"
+          required
+        ></textarea>
+      </form>
+      <div class="pane-footer">
+        <button 
+          class="btn btn-primary btn-glow" 
+          (click)="analyzeScript()" 
+          [disabled]="isAnalyzing || !scriptText || scriptForm.invalid"
+        >
+          <span *ngIf="!isAnalyzing">
+            <i class="fas fa-brain"></i> Run Neural Breakdown
+          </span>
+          <span *ngIf="isAnalyzing" class="loader-inline">
+            <i class="fas fa-spinner fa-spin"></i> Analyzing...
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-pane">
+      <div *ngIf="!analysisResult && !isAnalyzing && !error" class="empty-state glass-card">
+        <div class="empty-icon">
+          <i class="fas fa-radar"></i>
+        </div>
+        <h3>Awaiting Data</h3>
+        <p>Paste a script excerpt to begin the semantic extraction process.</p>
+      </div>
+
+      <div *ngIf="isAnalyzing" class="loading-state glass-card">
+        <div class="ai-orb"></div>
+        <h3>Vera is Thinking...</h3>
+        <p>{{ analysisStatus }}</p>
+      </div>
+
+      <div *ngIf="error" class="error-state glass-card">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p>{{ error }}</p>
+      </div>
+
+      <div *ngIf="analysisResult" class="results-content fade-in">
+        <!-- Safety Summary -->
+        <div class="safety-card glass-card" *ngIf="analysisResult.safetyAnalysis">
+          <div class="card-header highlight-red">
+            <i class="fas fa-shield-halved"></i>
+            <span>Safety Audit</span>
+          </div>
+          <div class="card-body">
+            <p>{{ analysisResult.safetyAnalysis.riskSummary }}</p>
+          </div>
+        </div>
+
+        <!-- Scene Breakdown -->
+        <div class="scene-list">
+          <div 
+            class="scene-card glass-card clickable" 
+            *ngFor="let scene of analysisResult.scenes"
+            (click)="openVisualization(scene)"
+            [class.active]="selectedScene?.id === scene.id"
+          >
+            <div class="scene-header">
+              <span class="scene-id">Sc. {{ scene.id }}</span>
+              <h4 class="scene-title">{{ scene.title }}</h4>
+              <div class="hover-hint">
+                <i class="fas fa-wand-magic-sparkles"></i> Bring to Life
+              </div>
+            </div>
+            
+            <div class="scene-metadata">
+              <div class="meta-item">
+                <i class="fas fa-users"></i>
+                <span *ngFor="let char of scene.characters" class="tag char-tag">{{ char }}</span>
+              </div>
+            </div>
+
+            <div class="scene-details">
+              <div class="detail-group" *ngIf="scene.risks?.length">
+                <label>Production Risks</label>
+                <div class="detail-tags">
+                  <span *ngFor="let risk of scene.risks" class="risk-tag" [class.high-risk]="risk.toLowerCase().includes('high')">
+                    {{ risk }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Visualization Sidebar (Director's Board) -->
+  <div class="viz-sidebar-overlay" *ngIf="selectedScene" (click)="closeVisualization()">
+    <div class="viz-sidebar glass-card" (click)="$event.stopPropagation()">
+      <div class="viz-header">
+        <div class="header-main">
+          <h2>Director's Board</h2>
+          <span class="scene-tag">Sc. {{ selectedScene.id }}: {{ selectedScene.title }}</span>
+        </div>
+        <button class="close-btn" (click)="closeVisualization()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="viz-content">
+        <div *ngIf="isVisualizing" class="viz-loading">
+          <div class="ai-circles">
+            <div></div><div></div><div></div>
+          </div>
+          <p>Generating Cinematic Vision...</p>
+        </div>
+
+        <div *ngIf="!isVisualizing && visualData" class="viz-results animate-fade-in">
+          <div class="viz-section">
+            <h3><i class="fas fa-camera"></i> Proposed Shot List</h3>
+            <div class="shot-grid">
+              <div class="shot-card" *ngFor="let shot of visualData">
+                <div class="shot-img-placeholder">
+                  <i class="fas fa-image"></i>
+                  <span>AI Pre-Viz Gen</span>
+                </div>
+                <div class="shot-info">
+                  <div class="shot-head">
+                    <span class="shot-num">Shot {{ shot.shotNumber }}</span>
+                    <span class="shot-angle">{{ shot.angle }}</span>
+                  </div>
+                  <p class="shot-desc">{{ shot.description }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="viz-section">
+            <h3><i class="fas fa-palette"></i> Mood & Lighting</h3>
+            <div class="mood-box">
+              <p>Based on the semantic analysis of **{{ selectedScene.title }}**, Vera suggests a **High-Contrast Noir** palette with low-key lighting to emphasize the narrative tension.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

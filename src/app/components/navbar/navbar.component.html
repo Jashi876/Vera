@@ -4,32 +4,46 @@
       <div class="logo-icon">
         <i class="fas fa-clock"></i>
       </div>
-      <span class="logo-text">VERA</span>
+      <span class="logo-text">V.E.R.A</span>
     </a>
 
     <div class="nav-links" [class.active]="mobileMenuOpen">
       <a routerLink="/home" routerLinkActive="active" class="nav-link">Home</a>
       <a href="#features" class="nav-link">Features</a>
-      <a routerLink="/pricing" routerLinkActive="active" class="nav-link">Pricing</a>
+      <a routerLink="/pricing" routerLinkActive="active" class="nav-link"
+        >Pricing</a
+      >
       <ng-container *ngIf="user">
-        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
-        <a routerLink="/team" routerLinkActive="active" class="nav-link">Team</a>
-        <a routerLink="/settings" routerLinkActive="active" class="nav-link">Settings</a>
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link"
+          >Dashboard</a
+        >
+        <a routerLink="/team" routerLinkActive="active" class="nav-link"
+          >Team</a
+        >
+        <a routerLink="/settings" routerLinkActive="active" class="nav-link"
+          >Settings</a
+        >
       </ng-container>
-      
+
       <div class="nav-actions">
         <ng-container *ngIf="!user">
           <a routerLink="/login" class="btn btn-ghost btn-sm">Sign In</a>
           <a routerLink="/signup" class="btn btn-primary btn-sm">Get Started</a>
         </ng-container>
         <ng-container *ngIf="user">
-          <button (click)="logout()" class="btn btn-ghost btn-sm">Log Out</button>
+          <button (click)="logout()" class="btn btn-ghost btn-sm">
+            Log Out
+          </button>
         </ng-container>
       </div>
     </div>
 
     <button class="mobile-toggle" (click)="toggleMenu()">
-      <i class="fas" [class.fa-times]="mobileMenuOpen" [class.fa-bars]="!mobileMenuOpen"></i>
+      <i
+        class="fas"
+        [class.fa-times]="mobileMenuOpen"
+        [class.fa-bars]="!mobileMenuOpen"
+      ></i>
     </button>
   </div>
 </nav>

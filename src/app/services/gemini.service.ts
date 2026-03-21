@@ -43,46 +43,81 @@ export class GeminiService {
    * Neural Script Breakdown: Semantic extraction layer
    * Using real Gemini API via fetch to bypass SDK version issues.
    */
-  async analyzeScript(scriptText: string) {
+  async analyzeScript(scriptText: string, onProgress?: (msg: string) => void) {
     if (!this.apiKey) {
       console.warn('Gemini API Key missing. Falling back to simulation.');
       return this.simulateAnalysis(scriptText);
     }
 
-    try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${this.apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `Perform a neural script breakdown on this text: "${scriptText}". 
-              Differentiate precisely between:
-              - Physical Props (items characters hold/use)
-              - Background SFX/VFX (ambient sounds or digital effects)
-              - Characters (Cast)
-              - High-Risk Elements (Stunts, Fire, Water, Weapons, Heights)
-              
-              Return a JSON object with: 
-              - scenes (array with id, title, characters, locations, props, sfx, vfx, risks)
-              - safetyAnalysis (mandatoryMeetings, riskSummary). 
-              Keep risks as an array of tags e.g. ['High-Risk', 'Stunts', 'Firearms'].`
-            }]
-          }]
-        })
-      });
-
-      const data = await response.json();
-      if (data.error) throw new Error(data.error.message);
-
-      const aiText = data.candidates[0].content.parts[0].text;
-      // Clean potential markdown code blocks
-      const jsonStr = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
-      return JSON.parse(jsonStr);
-    } catch (e) {
-      console.error('Gemini API Error:', e);
-      return this.simulateAnalysis(scriptText);
+    // 1. Split script into scenes based on common slugline headers
+    const sceneRegex = /(?=(?:EXT\.|INT\.|EST\.|I\/E\.|INT\/EXT\.))/i;
+    const sceneRawChunks = scriptText.split(sceneRegex).filter(c => c.trim().length > 10);
+    
+    // If it's a small excerpt, process normally
+    if (sceneRawChunks.length <= 5) {
+      return this.processBatch(scriptText);
     }
+
+    // 2. Batch scenes (5 scenes per batch for high detail)
+    const batchSize = 5;
+    const batches = [];
+    for (let i = 0; i < sceneRawChunks.length; i += batchSize) {
+      batches.push(sceneRawChunks.slice(i, i + batchSize).join('\n\n'));
+    }
+
+    onProgress?.(`Detected ${sceneRawChunks.length} scenes. Processing in ${batches.length} batches...`);
+
+    const allScenes: any[] = [];
+    let globalSafety: any = { mandatoryMeetings: [], riskSummary: '' };
+
+    // 3. Process batches sequentially to maintain order and avoid hitting rate limits too hard
+    for (let i = 0; i < batches.length; i++) {
+      onProgress?.(`Analyzing Batch ${i + 1}/${batches.length}...`);
+      try {
+        const result = await this.processBatch(batches[i], i * batchSize + 1);
+        if (result.scenes) allScenes.push(...result.scenes);
+        if (result.safetyAnalysis?.riskSummary) {
+          globalSafety.riskSummary += `\nBatch ${i+1}: ${result.safetyAnalysis.riskSummary}`;
+        }
+      } catch (e) {
+        console.error(`Batch ${i} failed:`, e);
+      }
+    }
+
+    return {
+      scenes: allScenes,
+      safetyAnalysis: {
+        mandatoryMeetings: ['Production Safety Briefing'],
+        riskSummary: globalSafety.riskSummary.trim() || 'Comprehensive analysis complete.'
+      }
+    };
+  }
+
+  private async processBatch(text: string, startId: number = 1) {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${this.apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: `Perform a neural script breakdown on this text: "${text}". 
+            This is part of a larger script. Please start scene numbering from ${startId}.
+            Differentiate between: Props, SFX/VFX, Characters, and High-Risk Elements.
+            
+            Return ONLY a JSON object with: 
+            - scenes (array with id, title, characters, locations, props, sfx, vfx, risks)
+            - safetyAnalysis (riskSummary).`
+          }]
+        }]
+      })
+    });
+
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.message);
+
+    const aiText = data.candidates[0].content.parts[0].text;
+    const jsonStr = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
+    return JSON.parse(jsonStr);
   }
 
   private async simulateAnalysis(scriptText: string) {

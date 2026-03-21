@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TeamService } from 'src/app/services/team.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-team',
@@ -27,7 +28,7 @@ export class TeamComponent implements OnInit {
     this.foundUser = null;
 
     try {
-      const { data, error } = await this.teamService.findUserByEmail(this.searchEmail);
+      const { data, error } = await firstValueFrom(this.teamService.findUserByEmail(this.searchEmail));
       if (error || !data) {
         this.searchError = 'Unable to find user with this email.';
       } else {

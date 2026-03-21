@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { AuthService } from './auth.service';
+import { from, Observable, of } from 'rxjs';
+import { map, switchMap, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -8,68 +10,72 @@ import { AuthService } from './auth.service';
 export class ProjectService {
   constructor(private supabase: SupabaseService, private auth: AuthService) {}
 
-  async getProjects() {
+  getProjects(): Observable<any> {
     const user = this.auth.session?.user;
-    if (!user) return { data: [], error: null };
+    if (!user) return of({ data: [], error: null });
 
-    const { data, error } = await this.supabase.client
+    return from(this.supabase.client
       .from('projects')
       .select('*')
       .eq('owner_id', user.id)
-      .order('created_at', { ascending: false });
-    
-    return { data, error };
+      .order('created_at', { ascending: false })
+    );
   }
 
-  async createProject(project: any) {
+  createProject(project: any): Observable<any> {
     const user = this.auth.session?.user;
-    if (!user) throw new Error('User not authenticated');
+    if (!user) {
+      return of({ data: null, error: new Error('User not authenticated') });
+    }
 
     const projectData = {
       title: project.title,
-      status: project.status || 'Pre-Production',
       owner_id: user.id
     };
 
-    const { data, error } = await this.supabase.client
+    return from(this.supabase.client
       .from('projects')
       .insert([projectData])
-      .select();
-    
-    return { data, error };
+      .select()
+    );
   }
 
-  async updateProject(id: string, updates: any) {
+  updateProject(id: string, updates: any): Observable<any> {
+    const user = this.auth.session?.user;
+    if (!user) return of({ data: null, error: new Error('Unauthorized') });
+
     const updatesData: any = {};
     if (updates.title) updatesData.title = updates.title;
-    if (updates.status) updatesData.status = updates.status;
 
-    const { data, error } = await this.supabase.client
+    return from(this.supabase.client
       .from('projects')
       .update(updatesData)
       .eq('id', id)
-      .select();
-    
-    return { data, error };
+      .eq('owner_id', user.id)
+      .select()
+    );
   }
 
-  async deleteProject(id: string) {
-    const { error } = await this.supabase.client
+  deleteProject(id: string): Observable<any> {
+    const user = this.auth.session?.user;
+    if (!user) return of({ data: null, error: new Error('Unauthorized') });
+
+    return from(this.supabase.client
       .from('projects')
       .delete()
-      .eq('id', id);
-    
-    return { error };
+      .eq('id', id)
+      .eq('owner_id', user.id)
+    );
   }
 
-  async getDashboardStats() {
-    // This would be more complex in real production, but for now:
-    const { data: projects } = await this.getProjects();
-    return {
-      activeProjects: projects?.length ?? 0,
-      shootDays: 0,
-      teamMembers: 0,
-      aiOptimization: 0
-    };
+  getDashboardStats(): Observable<any> {
+    return this.getProjects().pipe(
+      map(({ data: projects }) => ({
+        activeProjects: projects?.length ?? 0,
+        shootDays: 0,
+        teamMembers: 0,
+        aiOptimization: 0
+      }))
+    );
   }
 }

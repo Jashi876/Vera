@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from 'src/app/services/project.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-projects',
@@ -16,7 +17,6 @@ export class ProjectsComponent implements OnInit {
   
   newProject = {
     title: '',
-    status: 'Pre-Production',
     scenes: 0,
     progress: 0
   };
@@ -31,7 +31,7 @@ export class ProjectsComponent implements OnInit {
 
   async loadProjects() {
     this.loading = true;
-    const { data, error } = await this.projectService.getProjects();
+    const { data, error } = await firstValueFrom(this.projectService.getProjects());
     this.projects = data || [];
     this.loading = false;
   }
@@ -67,7 +67,6 @@ export class ProjectsComponent implements OnInit {
       this.editingProjectId = null;
       this.newProject = {
         title: '',
-        status: 'Pre-Production',
         scenes: 0,
         progress: 0
       };
@@ -85,9 +84,9 @@ export class ProjectsComponent implements OnInit {
     try {
       let result;
       if (this.isEditMode && this.editingProjectId) {
-        result = await this.projectService.updateProject(this.editingProjectId, this.newProject);
+        result = await firstValueFrom(this.projectService.updateProject(this.editingProjectId, this.newProject));
       } else {
-        result = await this.projectService.createProject(this.newProject);
+        result = await firstValueFrom(this.projectService.createProject(this.newProject));
       }
       
       if (result.error) throw result.error;
@@ -108,7 +107,7 @@ export class ProjectsComponent implements OnInit {
 
   async deleteProject(id: string) {
     if (confirm('Are you sure you want to delete this project?')) {
-      const { error } = await this.projectService.deleteProject(id);
+      const { error } = await firstValueFrom(this.projectService.deleteProject(id));
       if (error) {
         alert('Failed to delete project');
       } else {

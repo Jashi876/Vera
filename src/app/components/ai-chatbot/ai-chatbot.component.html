@@ -16,7 +16,7 @@
         Hello! I'm your AI production assistant. How can I help you optimize your shoot today?
       </div>
 
-      <div *ngFor="let msg of messages" [ngClass]="['message', msg.role]">
+      <div *ngFor="let msg of messages" class="message {{msg.role}}">
         {{ msg.text }}
       </div>
 
@@ -29,10 +29,12 @@
 
     <form class="chat-input-area" (submit)="sendMessage($event)">
       <input 
+        #chatInput
         type="text" 
         class="chat-input" 
         placeholder="Type a message..." 
-        [(ngModel)]="userInput" 
+        [value]="userInput"
+        (input)="userInput = chatInput.value"
         name="userInput"
         [disabled]="isLoading"
         autocomplete="off"
@@ -46,6 +48,6 @@
 
   <!-- Chat Toggle Button -->
   <button class="chatbot-toggle" (click)="toggleChat()" [class.active]="isOpen">
-    <i class="fas" [ngClass]="isOpen ? 'fa-comment-slash' : 'fa-robot'"></i>
+    <i class="fas {{isOpen ? 'fa-comment-slash' : 'fa-robot'}}"></i>
   </button>
 </div>
