@@ -12,6 +12,7 @@ import { UiService } from './services/ui.service';
 export class AppComponent implements OnInit {
   title = 'vera';
   isDashboard = false;
+  private readonly dashboardRoutePrefixes = ['/dashboard', '/settings', '/team'];
 
   constructor(
     private router: Router, 
@@ -24,8 +25,8 @@ export class AppComponent implements OnInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
-      const dashboardRoutes = ['/dashboard', '/projects', '/call-sheets', '/script-analyzer'];
-      this.isDashboard = dashboardRoutes.some(route => event.url.startsWith(route));
+      const currentUrl = event.urlAfterRedirects || event.url;
+      this.isDashboard = this.dashboardRoutePrefixes.some(route => currentUrl.startsWith(route));
       
       // Dynamic Title Logic
       let child = this.activatedRoute.firstChild;

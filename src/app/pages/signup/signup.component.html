@@ -31,7 +31,7 @@
         
         <div class="input-group">
           <label>Password</label>
-          <input type="password" class="input" placeholder="••••••••" formControlName="password">
+          <input type="password" class="input" placeholder="Create a password" formControlName="password">
           <div class="error-hint" *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.invalid">
             Min 6 characters required.
           </div>
@@ -62,12 +62,11 @@
     </div>
   </div>
 
-  <!-- Terms of Service Modal -->
   <div class="modal-overlay" [class.active]="showTerms">
     <div class="modal tos-modal">
       <div class="modal-header">
         <h3 class="modal-title">Terms of Service</h3>
-        <button class="modal-close" (click)="showTerms = false"><i class="fas fa-times"></i></button>
+        <button class="modal-close" type="button" (click)="showTerms = false" aria-label="Close terms of service"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body tos-content" style="max-height: 400px; overflow-y: auto; padding: 10px; font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
         <h4>1. Acceptance of Terms</h4>
@@ -90,8 +89,8 @@
         </div>
       </div>
       <div class="modal-footer" style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
-        <button class="btn btn-ghost" (click)="showTerms = false">Cancel</button>
-        <button class="btn btn-primary" [disabled]="!termsAccepted" (click)="showTerms = false">Accept & Continue</button>
+        <button class="btn btn-ghost" type="button" (click)="showTerms = false">Cancel</button>
+        <button class="btn btn-primary" type="button" [disabled]="!termsAccepted" (click)="showTerms = false">Accept & Continue</button>
       </div>
     </div>
   </div>

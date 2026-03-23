@@ -28,7 +28,7 @@
         </div>
         <div class="input-group">
           <label>Password</label>
-          <input type="password" class="input" placeholder="••••••••" formControlName="password">
+          <input type="password" class="input" placeholder="Password" formControlName="password">
           <div class="error-hint" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
             Password is required (min 6 chars).
           </div>

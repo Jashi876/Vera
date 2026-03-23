@@ -5,7 +5,7 @@ import { SettingsComponent } from './settings.component';
 import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
-  { path: '', component: SettingsComponent }
+  { path: '', component: SettingsComponent, data: { title: 'Settings' } }
 ];
 
 @NgModule({

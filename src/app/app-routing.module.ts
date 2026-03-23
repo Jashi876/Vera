@@ -9,23 +9,25 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', component: LandingComponent },
-  { path: 'home', component: HomeComponent },
+  { path: '', component: LandingComponent, data: { title: 'Landing' } },
+  { path: 'home', component: HomeComponent, data: { title: 'Features' } },
   { 
     path: 'dashboard', 
     loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
     canActivate: [AuthGuard],
     data: { title: 'Dashboard' }
   },
-  { 
-    path: 'settings', 
+  {
+    path: 'settings',
     loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    data: { title: 'Settings' }
   },
-  { 
-    path: 'team', 
+  {
+    path: 'team',
     loadChildren: () => import('./pages/team/team.module').then(m => m.TeamModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    data: { title: 'Team' }
   },
   { path: 'pricing', component: PricingComponent, data: { title: 'Pricing' } },
   { path: 'login', component: LoginComponent, data: { title: 'Sign In' } },

@@ -5,7 +5,7 @@ import { TeamComponent } from './team.component';
 import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
-  { path: '', component: TeamComponent }
+  { path: '', component: TeamComponent, data: { title: 'Team' } }
 ];
 
 @NgModule({

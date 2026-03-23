@@ -1,5 +1,5 @@
 <aside class="sidebar" [class.open]="isOpen">
-  <button class="sidebar-close" (click)="toggleSidebar()">
+  <button class="sidebar-close" type="button" (click)="toggleSidebar()" aria-label="Close sidebar">
     <i class="fas fa-times"></i>
   </button>
   <div class="sidebar-header">
@@ -18,11 +18,11 @@
         <i class="fas fa-th-large"></i>
         <span>Dashboard</span>
       </a>
-      <a routerLink="/projects" routerLinkActive="active" class="side-link">
+      <a routerLink="/dashboard/projects" routerLinkActive="active" class="side-link">
         <i class="fas fa-clapperboard"></i>
         <span>Projects</span>
       </a>
-      <a routerLink="/call-sheets" routerLinkActive="active" class="side-link">
+      <a routerLink="/dashboard/call-sheets" routerLinkActive="active" class="side-link">
         <i class="fas fa-file-invoice"></i>
         <span>Call Sheets</span>
       </a>
@@ -34,7 +34,7 @@
         <i class="fas fa-users"></i>
         <span>Team</span>
       </a>
-      <a routerLink="/schedules" routerLinkActive="active" class="side-link">
+      <a routerLink="/dashboard/schedules" routerLinkActive="active" class="side-link">
         <i class="fas fa-calendar-alt"></i>
         <span>Schedules</span>
       </a>
@@ -42,7 +42,7 @@
 
     <div class="nav-section">
       <span class="nav-section-label">Intelligence</span>
-      <a (click)="toggleAiChat()" class="side-link ai-trigger" style="cursor: pointer;">
+      <a (click)="toggleAiChat()" class="side-link ai-trigger" style="cursor: pointer;" role="button" tabindex="0" aria-label="Open Vera AI assistant">
         <i class="fas fa-robot"></i>
         <span>Vera AI</span>
       </a>
@@ -58,7 +58,7 @@
         <i class="fas fa-cog"></i>
         <span>Settings</span>
       </a>
-      <a (click)="logout()" class="side-link logout" style="cursor: pointer;">
+      <a (click)="logout()" class="side-link logout" style="cursor: pointer;" role="button" tabindex="0" aria-label="Sign out">
         <i class="fas fa-sign-out-alt"></i>
         <span>Sign Out</span>
       </a>
